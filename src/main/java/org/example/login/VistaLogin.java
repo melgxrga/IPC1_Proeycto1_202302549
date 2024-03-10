@@ -24,30 +24,29 @@ public class VistaLogin extends JFrame {
         LoginService loginService = new LoginService(usuarioService, productosService, doctorLogueado);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Agrega un espacio de 10 píxeles alrededor de cada componente
+        gbc.insets = new Insets(10, 10, 10, 10); 
 
-        // Crea los JLabels y JTextFields para ID y contraseña
         JLabel idLabel = new JLabel("ID");
         idLabel.setHorizontalAlignment(JLabel.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(idLabel, gbc); // Añade el JLabel para ID en la columna izquierda
+        add(idLabel, gbc); 
 
         idField = new JTextField(10);
         gbc.gridx = 1;
-        add(idField, gbc); // Añade el JTextField para ID en la columna derecha
+        add(idField, gbc);
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setHorizontalAlignment(JLabel.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(passwordLabel, gbc); // Añade el JLabel para contraseña en la columna izquierda
+        add(passwordLabel, gbc); 
 
         passwordField = new JPasswordField(10);
         gbc.gridx = 1;
-        add(passwordField, gbc); // Añade el JPasswordField para contraseña en la columna derecha
+        add(passwordField, gbc); 
 
-        // Añade el botón de iniciar sesión en la penúltima fila
+    
         JButton iniciarSesionButton = new JButton("Iniciar Sesión");
         iniciarSesionButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -55,46 +54,44 @@ public class VistaLogin extends JFrame {
                 String password = new String(passwordField.getPassword());
 
                 if (id.isEmpty() || !id.matches("\\d+")) {
-                    // El ID está vacío o contiene caracteres no numéricos
+                    
                     JOptionPane.showMessageDialog(null, "Por favor, ingrese un ID válido", "Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                int idInt = Integer.parseInt(id); // Convierte el ID a int
+                int idInt = Integer.parseInt(id); 
                 Usuario usuario = loginService.login(idInt, password);
                 if (usuario != null) {
-                    // El login fue exitoso
+             
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso", "Éxito",
                             JOptionPane.INFORMATION_MESSAGE);
                             System.out.println("ID del usuario logueado: " + usuario.getId());
                 } else {
-                    // El login falló
+               
                     JOptionPane.showMessageDialog(null, "Inicio de sesión fallido", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 2; // Hace que el botón de iniciar sesión ocupe 2 columnas
-        add(iniciarSesionButton, gbc); // Añade el botón de iniciar sesión
-
-        // Añade el botón de registrar en la última fila
+        gbc.gridwidth = 2;
+        add(iniciarSesionButton, gbc); 
         JButton registrarButton = new JButton("Registrar");
         registrarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new vistaRegistro(usuarioService); // Abre la ventana de registro
+                new vistaRegistro(usuarioService); 
             }
         });
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.gridwidth = 2; // Hace que el botón de registrar ocupe 2 columnas
-        add(registrarButton, gbc); // Añade el botón de registrar
+        gbc.gridwidth = 2; 
+        add(registrarButton, gbc);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Configura la operación de cierre por defecto
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         pack();
         setResizable(false);
-        setLocationRelativeTo(null); // Ajusta el tamaño del JFrame para que se ajuste a sus componentes
-        setVisible(true); // Hace visible el JFrame
+        setLocationRelativeTo(null); 
+        setVisible(true); 
     }
 }

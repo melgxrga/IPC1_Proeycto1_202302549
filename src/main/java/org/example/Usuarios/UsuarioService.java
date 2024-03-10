@@ -136,24 +136,38 @@ public class UsuarioService {
     public List<Date> obtenerHorariosDoctor(String nombreDoctor) {
         for (Usuario usuario : usuarios) {
             if (usuario.getRol().equals("Doctor") && usuario.getNombre().equals(nombreDoctor)) {
-                System.out.println("Doctor encontrado: " + usuario.getNombre()); // Depuración
+                System.out.println("Doctor encontrado: " + usuario.getNombre()); 
                 List<Date> horarios = usuario.getHorarios();
-                System.out.println("Horarios: " + horarios); // Depuración
+                System.out.println("Horarios: " + horarios); 
                 return horarios;
             }
         }
-        System.out.println("Doctor no encontrado: " + nombreDoctor); // Depuración
-        return new ArrayList<>(); // Devuelve una lista vacía si no se encuentra el doctor
+        System.out.println("Doctor no encontrado: " + nombreDoctor); 
+        return new ArrayList<>(); 
+    }
+    public Usuario obtenerDoctorPorNombre(String nombreDoctor) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNombre().equals(nombreDoctor) && usuario.getRol().equals("Doctor")) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public void guardarUsuario(Usuario usuarioActualizado) {
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == usuarioActualizado.getId()) {
+                usuarios.set(i, usuarioActualizado);
+                return;
+            }
+        }
+        System.out.println("Usuario no encontrado: " + usuarioActualizado.getNombre()); 
     }
     public UsuarioService() {
 
         usuarios = new ArrayList<>();
         Usuario admin = new Usuario(1, "Admin", "Admin", "1", 0, "", "ADMIN", "", "");
-        Usuario usuario = new Usuario(2, "paciente", "Admin", "1", 0, "", "Usuario", "", "");
-        Usuario doctor = new Usuario(3, "DoctorPrueba", "Admin", "1", 0, "", "Doctor", "cardiologo", "xxx");
         usuarios.add(admin);
-        usuarios.add(usuario);
-        usuarios.add(doctor);
     }
 
     public static Usuario generarUsuario(String nombre, String apellidos, String password, int edad, String genero) {
@@ -198,6 +212,14 @@ public class UsuarioService {
         usuario.setEspecialidadDoctor(especialidadDoctor);
         usuario.setNumeroDoctor(numeroDoctor);
         return usuario;
+    }
+    public List<Date> obtenerHorariosFiltrados(String especialidad, String nombreDoctor) {
+        Usuario doctor = obtenerDoctorPorNombre(nombreDoctor);
+        if (doctor != null && especialidad.equals(doctor.getEspecialidadDoctor())) {
+            return doctor.getHorarios();
+        }
+
+        return new ArrayList<>();
     }
 
     public static int generarId() {

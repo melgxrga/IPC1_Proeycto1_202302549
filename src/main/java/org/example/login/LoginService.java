@@ -1,5 +1,6 @@
 package org.example.login;
 
+import org.example.Citas.CitasService;
 import org.example.Productos.ProductosService;
 import org.example.Usuarios.Usuario;
 import org.example.Usuarios.UsuarioService;
@@ -12,10 +13,13 @@ class LoginService {
     private UsuarioService usuarioService;
     private ProductosService productosService;
     private DoctorHorarios doctorLogueado;
+    private CitasService citasService;
+
     public LoginService(UsuarioService usuarioService, ProductosService productosService, DoctorHorarios doctorLogueado) {
         this.usuarioService = usuarioService;
         this.productosService =  productosService;
         this.doctorLogueado = doctorLogueado;
+        this.citasService = citasService;
 
     }
 
@@ -24,12 +28,12 @@ class LoginService {
             if (usuario.getId() == id && usuario.getPassword().equals(password)) {
                 if (usuario.getRol() != null && usuario.getRol().equals("Usuario")) {
                     UsuarioService usuarioService = new UsuarioService();
-                    usuarioService.cargarUsuarios();  // Carga los usuarios antes de crear la VistaUsuario
-                    System.out.println(usuarioService.getUsuarios());  // Imprime los usuarios cargados
-                    VistaUsuario vistaUsuario = new VistaUsuario(usuarioService, productosService); // Pasa productosService a VistaUsuario
+                    usuarioService.cargarUsuarios();  
+                    System.out.println(usuarioService.getUsuarios());  
+                    VistaUsuario vistaUsuario = new VistaUsuario(usuarioService, productosService, citasService); 
                     vistaUsuario.setVisible(true);
                 } else if( usuario.getRol() != null && usuario.getRol().equals("ADMIN")){
-                    VistaAdministrador vistaAdministrador = new VistaAdministrador(usuarioService, productosService); // Pasa productosService a VistaAdministrador
+                    VistaAdministrador vistaAdministrador = new VistaAdministrador(usuarioService, productosService); 
                     vistaAdministrador.setVisible(true);
                 }    else if( usuario.getRol() != null && usuario.getRol().equals("Doctor")){
                     VistaDoctor vistaDoctor = new VistaDoctor(usuarioService, productosService); 

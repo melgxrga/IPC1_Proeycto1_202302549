@@ -54,22 +54,17 @@ public class VistaAdministrador extends JFrame {
         });
         JButton productosButton = new JButton("Productos");
         productosButton.addActionListener(e -> {
-            // Crea una variable final que haga referencia a productosService
+
             final ProductosService finalProductosService;
-        
-            // Verifica si productosService es null y, de ser así, lo inicializa
             if (productosService == null) {
                 finalProductosService = ProductosService.getInstance();
             } else {
                 finalProductosService = productosService;
             }
-        
-            // Ahora puedes llamar a getProductos() sin obtener un NullPointerException
+    
             List<Productos> productos = finalProductosService.getProductos();
-            CrudProductos crudProductos = new CrudProductos(finalProductosService); // Pasa finalProductosService en lugar de productosService
+            CrudProductos crudProductos = new CrudProductos(finalProductosService); 
             crudProductos.setVisible(true);
-        
-            // Actualiza la tabla con los datos de los productos
             updateTableProductos();
         });
         add(productosButton);
@@ -83,14 +78,10 @@ public class VistaAdministrador extends JFrame {
         topButtonPanel.add(doctoresButton);
         topButtonPanel.add(productosButton);
         topButtonPanel.add(pacientesButton);
-
-        // Añade la tabla y los paneles de botones al JFrame
         add(topButtonPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.EAST);
         setResizable(false);
-
-        // Centra el JFrame en la pantalla
         setLocationRelativeTo(null);
     }
 
@@ -105,18 +96,15 @@ public class VistaAdministrador extends JFrame {
                 .filter(usuario -> rol.equals(usuario.getRol()))
                 .collect(Collectors.toList());
 
-        tableModel.setRowCount(0); // Limpia la tabla
-
-        // Define las columnas en función del rol
+        tableModel.setRowCount(0); 
         if ("Usuario".equals(rol)) {
             tableModel.setColumnIdentifiers(new Object[] { "ID", "Nombre", "Apellidos", "Edad", "Genero" });
         } else if ("Doctor".equals(rol)) {
             tableModel.setColumnIdentifiers(new Object[] { "ID", "Nombre", "Apellidos", "Teléfono", "Especialidad" });
         } else {
-            // maneja la excepción
+
         }
 
-        // Añade los usuarios a la tabla
         if ("Usuario".equals(rol)) {
             for (Usuario usuario : usuariosRol) {
                 tableModel.addRow(new Object[] { usuario.getId(), usuario.getNombre(), usuario.getApellidos(),
@@ -130,21 +118,20 @@ public class VistaAdministrador extends JFrame {
         } 
         }
         private void updateTableProductos() {
-            // Crea una variable final que haga referencia a productosService si no es null,
-            // o a ProductosService.getInstance() si es null
+        
             final ProductosService finalProductosService = (productosService != null) ? productosService : ProductosService.getInstance();
         
-            // Ahora puedes llamar a getProductos() sin obtener un NullPointerException
+            
             List<Productos> productos = finalProductosService.getProductos();
         
-            tableModel.setRowCount(0); // Limpia la tabla
+            tableModel.setRowCount(0); 
         
-            // Define las columnas para los productos
+    
             tableModel.setColumnIdentifiers(new Object[] { "ID", "Nombre", "Precio", "Descripción", "Cantidad" });
         
             for (Productos producto : productos) {
                 tableModel.addRow(new Object[] { producto.getId(), producto.getNombreProducto(), producto.getPrecioProducto(),
-                        producto.getDescripcionProducto(), producto.getCantidadProducto() /* , ... otros campos ... */ });
+                        producto.getDescripcionProducto(), producto.getCantidadProducto() });
             }
         }
     private Object[][] getData(String rol) {
@@ -154,8 +141,6 @@ public class VistaAdministrador extends JFrame {
         List<Usuario> filteredUsuarios = usuarios.stream()
                 .filter(usuario -> usuario.getRol().equals(rol))
                 .collect(Collectors.toList());
-
-        // Imprime la lista de usuarios filtrados
         System.out.println("Usuarios filtrados: " + filteredUsuarios);
 
         Object[][] data = new Object[filteredUsuarios.size()][7];

@@ -72,8 +72,8 @@ public class CrudDoctorVista extends JFrame {
             JFrame frame = new JFrame();
             frame.setContentPane(chartPanel);
             frame.pack();
-            frame.setLocationRelativeTo(null); // Centra la ventana en la pantalla
-            frame.setResizable(false); // Hace que la ventana no sea redimensionable
+            frame.setLocationRelativeTo(null);
+            frame.setResizable(false); 
             frame.setVisible(true);
         });
         add(registrarButton);

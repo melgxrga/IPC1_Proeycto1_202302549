@@ -52,7 +52,7 @@ public class EditarProductos extends JFrame {
         JLabel descripcionLabel = new JLabel("Descripcion");
         descripcionField = new JTextField(10);
         gbc.gridx = 0;
-        gbc.gridy = 3; // incrementa el valor de gridy
+        gbc.gridy = 3; 
         panel.add(descripcionLabel, gbc);
         gbc.gridx = 1;
         panel.add(descripcionField, gbc);
@@ -61,14 +61,14 @@ public class EditarProductos extends JFrame {
         cantidadField = new JFormattedTextField();
         cantidadField.setColumns(10);
         gbc.gridx = 0;
-        gbc.gridy = 4; // incrementa el valor de gridy
+        gbc.gridy = 4; 
         panel.add(cantidadLabel, gbc);
         gbc.gridx = 1;
         panel.add(cantidadField, gbc);
     
         add(panel, BorderLayout.CENTER);
     
-        JPanel buttonPanel = new JPanel(); // Crea una instancia de JPanel
+        JPanel buttonPanel = new JPanel(); 
         JButton buscarButton = new JButton("Buscar");
         buttonPanel.add(buscarButton);
         buscarButton.addActionListener(new ActionListener() {
@@ -77,8 +77,8 @@ public class EditarProductos extends JFrame {
                 String id = idField.getText();
                 Productos producto = productosService.buscarPorId(id);
                 if (producto != null) {
-                    // Rellena los campos con la información del producto
-                    idField.setEditable(false);  // Bloquea el campo idField
+                   
+                    idField.setEditable(false);
                     nombreField.setText(producto.getNombreProducto());
                     precioField.setText(String.valueOf(producto.getPrecioProducto()));
                     descripcionField.setText(producto.getDescripcionProducto());

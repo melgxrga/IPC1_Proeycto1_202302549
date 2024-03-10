@@ -49,9 +49,10 @@ public class Usuario implements Serializable  {
         this.numeroDoctor = numeroDoctor;
     }
     public List<Date> getHorarios() {
-        return horarios.getHorarios();
+        List<Date> horariosUsuario = horarios.getHorarios();
+        System.out.println("Horarios del usuario: " + horariosUsuario); // Depuración
+        return horariosUsuario;
     }
-
 
     public int getId() {
         return id;

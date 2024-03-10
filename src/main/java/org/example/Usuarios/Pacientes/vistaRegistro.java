@@ -14,7 +14,7 @@ public class vistaRegistro extends JFrame {
     private JTextField nombreField;
     private JTextField apellidoField;
     private JPasswordField passwordField;
-    private JFormattedTextField edadField; // Cambia JTextField a JFormattedTextField
+    private JFormattedTextField edadField; 
     private UsuarioService usuarioService;
     private JComboBox<String> generoBox;
     private JButton registrarButton;
@@ -24,9 +24,7 @@ public class vistaRegistro extends JFrame {
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Agrega un espacio de 10 píxeles alrededor de cada componente
-
-        // Crea los JLabels y JTextFields para nombre, apellido, contraseña y género
+        gbc.insets = new Insets(10, 10, 10, 10); 
         JLabel nombreLabel = new JLabel("Nombre");
         nombreField = new JTextField(10);
         JLabel apellidoLabel = new JLabel("Apellido");
@@ -34,18 +32,16 @@ public class vistaRegistro extends JFrame {
         JLabel passwordLabel = new JLabel("Password");
         passwordField = new JPasswordField(10);
         JLabel edadLabel = new JLabel("Edad");
-
-        // Inicializa edadField como un JFormattedTextField que solo acepta números
+    
         NumberFormat format = NumberFormat.getIntegerInstance();
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setValueClass(Integer.class);
         formatter.setMinimum(0);
         formatter.setMaximum(Integer.MAX_VALUE);
-        formatter.setAllowsInvalid(true); // Permite valores inválidos
+        formatter.setAllowsInvalid(true); 
         edadField = new JFormattedTextField(formatter);
         edadField.setColumns(10);
 
-        // Agrega un InputVerifier para validar la entrada
         edadField.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
@@ -54,7 +50,7 @@ public class vistaRegistro extends JFrame {
             }
         });
         JLabel generoLabel = new JLabel("Género");
-        generoBox = new JComboBox<>(); // Usa la variable de instancia generoBox en lugar de declarar una nueva
+        generoBox = new JComboBox<>(); 
         generoBox.addItem("Masculino");
         generoBox.addItem("Femenino");
         registrarButton = new JButton("Registrar");
@@ -102,7 +98,6 @@ public class vistaRegistro extends JFrame {
             }
         });
 
-        // Añade los JLabels y JTextFields al JFrame
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(nombreLabel, gbc);

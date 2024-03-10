@@ -25,7 +25,6 @@ public class EliminarProductos extends JFrame {
         this.productosService = productosService;
         buttonPanel = new JPanel();
 
-        // Crea los campos de texto y los deshabilita
         idField = new JTextField(20);
         nombreProductoField = new JTextField(20);
         nombreProductoField.setEditable(false);
@@ -40,7 +39,6 @@ public class EliminarProductos extends JFrame {
         JLabel precioLabel = new JLabel("Precio:");
         JLabel descripcionLabel = new JLabel("Descripcion:");
         JLabel cantidadLabel = new JLabel("Cantidad:");
-        // Crea el botón de eliminar
         JButton eliminarButton = new JButton("Eliminar");
         buttonPanel.add(eliminarButton);
 

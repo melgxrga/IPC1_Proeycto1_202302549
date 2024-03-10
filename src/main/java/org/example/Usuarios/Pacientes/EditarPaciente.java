@@ -50,7 +50,7 @@ public class EditarPaciente extends JFrame {
         JLabel apellidoLabel = new JLabel("Apellido");
         apellidoField = new JTextField(10);
         gbc.gridx = 0;
-        gbc.gridy = 2; // incrementa el valor de gridy
+        gbc.gridy = 2;
         panel.add(apellidoLabel, gbc);
         gbc.gridx = 1;
         panel.add(apellidoField, gbc);
@@ -58,7 +58,7 @@ public class EditarPaciente extends JFrame {
         JLabel passwordLabel = new JLabel("Password");
         passwordField = new JPasswordField(10);
         gbc.gridx = 0;
-        gbc.gridy = 3; // incrementa el valor de gridy
+        gbc.gridy = 3;
         panel.add(passwordLabel, gbc);
         gbc.gridx = 1;
         panel.add(passwordField, gbc);
@@ -67,7 +67,7 @@ public class EditarPaciente extends JFrame {
         edadField = new JFormattedTextField();
         edadField.setColumns(10);
         gbc.gridx = 0;
-        gbc.gridy = 4; // incrementa el valor de gridy
+        gbc.gridy = 4; 
         panel.add(edadLabel, gbc);
         gbc.gridx = 1;
         panel.add(edadField, gbc);
@@ -77,7 +77,7 @@ public class EditarPaciente extends JFrame {
         generoBox.addItem("Masculino");
         generoBox.addItem("Femenino");
         gbc.gridx = 0;
-        gbc.gridy = 5; // incrementa el valor de gridy
+        gbc.gridy = 5; 
         panel.add(generoLabel, gbc);
         gbc.gridx = 1;
         panel.add(generoBox, gbc);

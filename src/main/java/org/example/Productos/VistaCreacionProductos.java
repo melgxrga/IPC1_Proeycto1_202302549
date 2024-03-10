@@ -91,7 +91,6 @@ public class VistaCreacionProductos extends JFrame {
                         JOptionPane.showMessageDialog(null, "ID del nuevo producto: " + nuevoProducto.getId());
                         System.out.println(VistaCreacionProductos.this.productosService.getProductos());
                     } else {
-                        // Usa getInstance() en lugar de new ProductosService()
                         ProductosService newProductosService = ProductosService.getInstance();
 
                         nuevoProducto = newProductosService.generaProductos(nombreProductoStr, precioProductoInt, descripcionProductoStr, cantidadProductoInt);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import org.example.Citas.*;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -20,15 +21,17 @@ import java.util.stream.Collectors;
 public class VistaUsuario extends JFrame implements Observer {
     private UsuarioService usuarioService;
     private ProductosService productoService;
+    private CitasService citasService;
     private JComboBox<String> especialidadesComboBox;
-    private JComboBox<String> horarioComboBox;
+    JComboBox<Date> horarioComboBox = new JComboBox<>();
     private List<Productos> productos;
     private JPanel cards;
     private Usuario usuarioLogueado;
 
-    public VistaUsuario(UsuarioService usuarioService, ProductosService productoService) {
+    public VistaUsuario(UsuarioService usuarioService, ProductosService productoService, CitasService citasService) {
         this.usuarioService = usuarioService;
         this.productoService = productoService;
+        this.citasService = citasService;
         this.usuarioService.addObserver(this);
 
         setTitle("Vista Usuario");
@@ -80,47 +83,121 @@ public class VistaUsuario extends JFrame implements Observer {
 
         c.gridx = 2;
         solicitarCitaPanel.add(especialidadesComboBox, c);
-
-        // Agregar nuevo JLabel, JComboBox y JButton
-        // Continuando desde donde lo dejaste...
         c.gridy = 3;
         c.gridx = 0;
         JLabel otroLabel = new JLabel("Doctor:");
         solicitarCitaPanel.add(otroLabel, c);
 
         c.gridx = 1;
+
         JComboBox<String> doctoresComboBox = new JComboBox<>();
-        doctoresComboBox.setPreferredSize(new Dimension(100, 20));
-        // Obtener la lista de nombres de doctores
+
         List<String> nombresDoctores = usuarioService.obtenerNombresDoctores();
+
         for (String nombreDoctor : nombresDoctores) {
             doctoresComboBox.addItem(nombreDoctor);
         }
+
+        JPanel botonesPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints cBotones = new GridBagConstraints();
+        JButton filtrarButton = new JButton("Filtrar");
+        cBotones.gridx = 0;
+        botonesPanel.add(filtrarButton, cBotones);
+
+        filtrarButton.addActionListener(e -> {
+            String especialidadSeleccionada = (String) especialidadesComboBox.getSelectedItem();
+            String doctorSeleccionado = (String) doctoresComboBox.getSelectedItem();
+            if (especialidadSeleccionada != null && doctorSeleccionado != null) {
+                List<Date> horariosFiltrados = usuarioService.obtenerHorariosFiltrados(especialidadSeleccionada,
+                        doctorSeleccionado);
+                horarioComboBox.removeAllItems();
+                for (Date horario : horariosFiltrados) {
+                    horarioComboBox.addItem(horario);
+                }
+            }
+        });
+        JButton generarCitaButton = new JButton("Generar Cita");
+        cBotones.gridx = 1;
+        botonesPanel.add(generarCitaButton, cBotones);
+
+        botonesPanel.add(generarCitaButton, cBotones);
+
+        generarCitaButton.addActionListener(e -> {
+            String nombreDoctor = (String) doctoresComboBox.getSelectedItem();
+            Date horarioDoctor = (Date) horarioComboBox.getSelectedItem();
+            String estado = "En espera";
+            System.out.println("nombreDoctor: " + nombreDoctor);
+            System.out.println("horarioDoctor: " + horarioDoctor);
+            System.out.println("estado: " + estado);
+            if (nombreDoctor == null || horarioDoctor == null) {
+                throw new IllegalArgumentException("El nombre del doctor y el horario no pueden ser nulos");
+            } else {
+                if (citasService == null) {
+                    this.citasService = CitasService.getInstancia();
+                    System.out.println("citasService fue null, se creó una nueva instancia" + citasService);
+                } else {
+                    this.citasService = citasService;
+                    System.out.println("citasService no fue null, se usó la instancia pasada");
+                }
+                if (nombreDoctor == null) {
+                    throw new IllegalArgumentException("nombreDoctor no puede ser null");
+                }
+                if (horarioDoctor == null) {
+                    throw new IllegalArgumentException("horarioDoctor no puede ser null");
+                }
+                if (estado == null) {
+                    throw new IllegalArgumentException("estado no puede ser null");
+                }
+
+                Cita nuevaCita = new Cita(nombreDoctor, horarioDoctor, estado);
+                System.out.println("Antes de agregarCita, citasService es: " + citasService);
+                citasService.agregarCita(nuevaCita);
+                JOptionPane.showMessageDialog(null, "Cita generada con éxito!");
+            }
+        });
+        doctoresComboBox.addActionListener(e -> {
+            String nombreDoctorSeleccionado = (String) doctoresComboBox.getSelectedItem();
+            if (nombreDoctorSeleccionado != null) {
+                Usuario doctorSeleccionado = usuarioService.obtenerDoctorPorNombre(nombreDoctorSeleccionado);
+                if (doctorSeleccionado != null) {
+                    List<Date> horariosDoctor = doctorSeleccionado.getHorarios();
+                    horarioComboBox.removeAllItems();
+                    for (Date horario : horariosDoctor) {
+                        horarioComboBox.addItem(horario);
+                    }
+                }
+            }
+        });
+
         solicitarCitaPanel.add(doctoresComboBox, c);
 
         c.gridx = 2;
         JButton mostrarHorariosButton = new JButton("Mostrar Horarios");
         mostrarHorariosButton.addActionListener(e -> {
             String nombreDoctorSeleccionado = (String) doctoresComboBox.getSelectedItem();
-            System.out.println("Doctor seleccionado: " + nombreDoctorSeleccionado); // Depuración
+            System.out.println("Doctor seleccionado: " + nombreDoctorSeleccionado);
             if (nombreDoctorSeleccionado != null) {
-                List<Date> horariosAsignados = usuarioService.obtenerHorariosDoctor(nombreDoctorSeleccionado);
-                System.out.println("Horarios obtenidos: " + horariosAsignados); // Depuración
-                if (horariosAsignados.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,
-                            "No hay horarios asignados para el doctor seleccionado.");
-                    doctoresComboBox.setSelectedIndex(-1); // Resetea el valor seleccionado
+                Usuario doctorSeleccionado = usuarioService.obtenerDoctorPorNombre(nombreDoctorSeleccionado);
+                if (doctorSeleccionado != null) {
+                    List<Date> horariosAsignados = doctorSeleccionado.getHorarios();
+                    System.out.println("Horarios obtenidos: " + horariosAsignados);
+                    if (horariosAsignados.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,
+                                "No hay horarios asignados para el doctor seleccionado.");
+                        doctoresComboBox.setSelectedIndex(-1);
+                    } else {
+                        String mensaje = horariosAsignados.stream()
+                                .map(Date::toString)
+                                .collect(Collectors.joining(", "));
+                        JOptionPane.showMessageDialog(null, mensaje);
+                    }
                 } else {
-                    String mensaje = horariosAsignados.stream()
-                            .map(Date::toString)
-                            .collect(Collectors.joining(", "));
-                    JOptionPane.showMessageDialog(null, mensaje);
+                    System.out.println("Doctor no encontrado: " + nombreDoctorSeleccionado);
                 }
             }
         });
         solicitarCitaPanel.add(mostrarHorariosButton, c);
 
-        // Continuar con el código original
         JLabel horarioLabel = new JLabel("Seleccionar horario:");
         c.gridy = 4;
         c.gridx = 0;
@@ -132,12 +209,8 @@ public class VistaUsuario extends JFrame implements Observer {
         c.insets = new Insets(0, 0, 0, 10);
         horarioComboBox.setPreferredSize(new Dimension(100, 20));
         solicitarCitaPanel.add(horarioComboBox, c);
-
-        // Resto del código...
-        // Crear un nuevo JPanel para la barra de título
         JPanel titleBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        // Crear un nuevo JButton para editar usuario
+        this.add(botonesPanel, BorderLayout.SOUTH);
         JButton editarUsuarioButton = new JButton("Editar Usuario");
         editarUsuarioButton.addActionListener(e -> {
             this.usuarioLogueado = UsuarioService.getUsuarioLogueado();
@@ -150,22 +223,17 @@ public class VistaUsuario extends JFrame implements Observer {
                 editarPropioPerfil.setGeneroBox(usuarioLogueado.getGenero());
                 editarPropioPerfil.setVisible(true);
             } else {
-                // Manejar el caso en que no hay usuario logueado
             }
         });
-        // Crear un nuevo JButton para cerrar la ventana
+
+
         JButton closeButton = new JButton("X");
         closeButton.addActionListener(e -> dispose());
-
-        // Agregar los JButtons al JPanel
         titleBar.add(editarUsuarioButton);
         titleBar.add(closeButton);
-
-        // Configurar el JPanel para que sea la barra de título
+        this.add(botonesPanel, BorderLayout.SOUTH);
         setUndecorated(true);
         getContentPane().add(titleBar, BorderLayout.NORTH);
-
-        // Agregar un MouseListener al JPanel para que puedas mover la ventana
         MouseAdapter mouseAdapter = new MouseAdapter() {
             private Point origin;
 
@@ -187,6 +255,7 @@ public class VistaUsuario extends JFrame implements Observer {
                 origin = null;
             }
         };
+
         titleBar.addMouseListener(mouseAdapter);
         titleBar.addMouseMotionListener(mouseAdapter);
         titleBar.addMouseListener(mouseAdapter);
@@ -242,6 +311,18 @@ public class VistaUsuario extends JFrame implements Observer {
                 }
             }
         });
+        String[] columnNames = { "Número", "Estado", "Nombre del Doctor", "Especialidad" };
+        Object[][] data = {
+                { 1, "Pendiente", "Dr. Juan", "Cardiología" },
+                { 2, "Rechazada", "Dr. Ana", "Neurología" },
+                { 3, "Aceptada", "Dr. Pedro", "Pediatría" }
+        };
+        JTable table = new JTable(data, columnNames);
+        table.setEnabled(false);
+        JScrollPane scrollPane = new JScrollPane(table);
+        verEstadoCitaPanel.add(scrollPane);
+        verEstadoCitaPanel.validate();
+        verEstadoCitaPanel.repaint();
         c.gridy = 2;
         solicitarCitaPanel.add(especialidadesLabel, c);
 
@@ -281,7 +362,6 @@ public class VistaUsuario extends JFrame implements Observer {
                 }
             }
         });
-      
         setPreferredSize(new Dimension(1000, 600));
         pack();
         setResizable(false);
@@ -302,7 +382,7 @@ public class VistaUsuario extends JFrame implements Observer {
         for (String especialidad : especialidadesDisponibles) {
             especialidadesComboBox.addItem(especialidad);
         }
-        especialidadesComboBox.setSelectedIndex(-1); // Resetea el valor seleccionado
+        especialidadesComboBox.setSelectedIndex(-1);
     }
 
     private List<Productos> getProductos() {

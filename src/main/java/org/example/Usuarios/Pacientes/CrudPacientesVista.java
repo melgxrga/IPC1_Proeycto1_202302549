@@ -50,6 +50,6 @@ public class CrudPacientesVista extends JFrame implements Observer {
 
     @Override
     public void update() {
-        // Aquí puedes poner el código para actualizar la vista cuando se notifica un cambio
+    
     }
 }

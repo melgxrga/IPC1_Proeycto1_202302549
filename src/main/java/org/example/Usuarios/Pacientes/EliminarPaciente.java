@@ -21,11 +21,7 @@ public class EliminarPaciente extends JFrame {
 
     public EliminarPaciente(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-
-        // Crea el panel de botones
         buttonPanel = new JPanel();
-
-        // Crea los campos de texto y los deshabilita
         idField = new JTextField(20);
         nombreField = new JTextField(20);
         nombreField.setEditable(false);
@@ -38,14 +34,11 @@ public class EliminarPaciente extends JFrame {
         generoBox = new JComboBox(new String[] {"Masculino", "Femenino"});
         generoBox.setEnabled(false);
 
-        // Crea los labels
         JLabel nombreLabel = new JLabel("Nombre:");
         JLabel apellidoLabel = new JLabel("Apellido:");
         JLabel passwordLabel = new JLabel("Contraseña:");
         JLabel edadLabel = new JLabel("Edad:");
         JLabel generoLabel = new JLabel("Género:");
-
-        // Crea el botón de eliminar
         JButton eliminarButton = new JButton("Eliminar");
         buttonPanel.add(eliminarButton);
 
@@ -86,10 +79,7 @@ public class EliminarPaciente extends JFrame {
             }
         });
 
-        // Crea un panel para los campos de entrada y los labels
         JPanel inputPanel = new JPanel(new GridLayout(8, 2));
-
-        // Añade los labels y los campos de entrada al panel
         inputPanel.add(new JLabel("ID:"));
         inputPanel.add(idField);
         inputPanel.add(nombreLabel);
@@ -102,12 +92,8 @@ public class EliminarPaciente extends JFrame {
         inputPanel.add(edadField);
         inputPanel.add(generoLabel);
         inputPanel.add(generoBox);
-
-        // Añade los paneles al marco
         add(inputPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-
-        // Configura el marco
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
